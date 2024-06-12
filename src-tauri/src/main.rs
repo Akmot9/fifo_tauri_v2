@@ -57,7 +57,7 @@ fn set_producer_count(count: usize, state: State<'_, ProducerState>, app_handle:
                 let packet = Packet::new(ii, i);
                 println!("2: Packet sent: {}", &packet);
                 tx.send(packet).unwrap();
-                thread::sleep(Duration::from_millis(3000));
+                thread::sleep(Duration::from_millis(500));
                 ii += 1;
             }
         });
@@ -74,13 +74,13 @@ fn set_producer_count(count: usize, state: State<'_, ProducerState>, app_handle:
             let start = Instant::now();
             {
                 let mut packet_locked = packets.lock().unwrap();
-                println!("4: Mutex locked: {:?}", packet_locked);
+                println!("4: Mutex locked: {:?} ", packet_locked);
                 thread::sleep(Duration::from_millis(2000)); // Simule un ajout prolongé
                 packet_locked.push(packet.clone());
-                println!("5: Packet pushed to vector: {:?}", packet_locked);
+                println!("  5: Packet pushed to vector: {:?}", packet.clone());
             }
             let duration = start.elapsed();
-            println!("Mutex lock duration: {:?}", duration);
+            println!("  Mutex unlocked, mutex lock duration: {:?}", duration);
 
             thread::sleep(Duration::from_millis(1000));
             println!("6: Packet processed: {}", &packet);
